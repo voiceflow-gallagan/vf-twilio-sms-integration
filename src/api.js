@@ -25,7 +25,6 @@ export const Dialog = {
       console.log('No Reply')
       requestData.action = { type: 'no-reply' }
     } else {
-      console.log('Reply', body.Body)
       requestData.action = { type: 'text', payload: body.Body }
       if (body?.MediaContentType0?.includes('image')) {
         console.log('Add media URL')
@@ -36,11 +35,10 @@ export const Dialog = {
         }
       }
     }
-    console.log('Request Data', requestData)
     return axios
       .post(
         `https://general-runtime.voiceflow.com/state/user/${encodeURI(
-          from + '-vf'
+          from
         )}/interact?logs=off`,
         requestData,
         {
@@ -54,7 +52,6 @@ export const Dialog = {
         }
       )
       .then(function (response) {
-        console.log('Response', response.data)
         let noReply = 0
         // loop through the traces
         let messages = []
@@ -69,7 +66,6 @@ export const Dialog = {
               break
             }
             case 'visual': {
-              console.log(trace.payload)
               messages.push({ image: trace.payload.image })
               break
             }
@@ -86,7 +82,6 @@ export const Dialog = {
           }
         }
         if (messages.length != 0) {
-          console.log('Send messages')
           sendMessages(to, from, messages, noReply)
         }
         return response.data
@@ -101,7 +96,6 @@ export const Dialog = {
 
 const sendMessages = async (from, to, messages, noreply) => {
   let noReply = noreply * 1000
-  console.log('No reply: ', noReply)
   for (let i = 0; i < messages.length; i++) {
     const message = messages[i]
 
