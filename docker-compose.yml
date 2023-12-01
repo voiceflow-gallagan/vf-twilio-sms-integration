@@ -1,0 +1,18 @@
+version: '3'
+services:
+  vf-analytics-proxy:
+    build: .
+    restart: unless-stopped
+    image: 'vf-sms-twilio'
+    container_name: 'vf-sms-twilio'
+    ports:
+      - '${PORT}:${PORT}'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${PORT}/health"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+    volumes:
+      - .:/usr/src/app
+    environment:
+      - NODE_ENV=${NODE_ENV}

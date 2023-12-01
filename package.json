@@ -1,0 +1,24 @@
+{
+  "name": "vf-twilio-sms-integration",
+  "module": "./src/app.js",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "scripts": {
+    "start": "docker-compose down --rmi all && docker-compose up --remove-orphans --build --force-recreate -d",
+    "dev": "docker-compose down --rmi all && docker-compose up --remove-orphans --build",
+    "app": "bun ./src/app.js",
+    "stop": "docker-compose down"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "body-parser": "^1.20.2",
+    "elysia": "^0.7.29",
+    "express": "^4.18.2",
+    "twilio": "^4.19.0"
+  }
+}
