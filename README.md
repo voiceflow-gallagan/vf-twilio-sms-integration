@@ -27,10 +27,28 @@ Here's a brief explanation of the project structure:
 1. Clone this repository to your local machine.
 2. Rename the `.env.template` to `.env` and replace the placeholders with your actual Twilio and Voiceflow credentials.
 3. Make sure Docker and Docker Compose are installed on your machine (check bellow for installation instructions).
-4. Run the application using the `start` script defined in `package.json`:
+4. Run the script to build and start the container:
 
 ```bash
-npm run start
+docker-compose up
+```
+
+OR if you have node/npm installed, run the application using the `dev` script defined in `package.json`:
+
+```bash
+npm run dev
+```
+
+5. If everything went well, and you don't have any errors, next time you can just run:
+
+```bash
+docker-compose up -d
+```
+
+OR
+
+```bash
+  npm start
 ```
 
 ## Usage

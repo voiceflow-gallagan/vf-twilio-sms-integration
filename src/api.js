@@ -38,16 +38,16 @@ export const Dialog = {
     return axios
       .post(
         `https://general-runtime.voiceflow.com/state/user/${encodeURI(
-          from
+          from.substring(1)
         )}/interact?logs=off`,
         requestData,
         {
           headers: {
             Authorization: VOICEFLOW_API_KEY,
-            accept: 'application / json',
+            accept: 'application/json',
             'content-type': 'application/json',
             versionID: VOICEFLOW_VERSION_ID,
-            sessionid: session,
+            sessionID: session,
           },
         }
       )
