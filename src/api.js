@@ -12,7 +12,7 @@ export const Dialog = {
   interact: async function (from, to, body, set) {
     clearTimeout(noreplyTimeout)
 
-    let requestData = {
+    let requestData = customRequestData || {
       config: {
         tts: false,
         stripSSML: true,
@@ -21,17 +21,19 @@ export const Dialog = {
       },
     }
 
-    if (!body) {
-      console.log('No Reply')
-      requestData.action = { type: 'no-reply' }
-    } else {
-      requestData.action = { type: 'text', payload: body.Body }
-      if (body?.MediaContentType0?.includes('image')) {
-        console.log('Add media URL')
-        requestData.state = {
-          variables: {
-            imageUrl: body.MediaUrl0,
-          },
+    if (!customRequestData) {
+      if (!body) {
+        console.log('No Reply')
+        requestData.action = { type: 'no-reply' }
+      } else {
+        requestData.action = { type: 'text', payload: body.Body }
+        if (body?.MediaContentType0?.includes('image')) {
+          console.log('Add media URL')
+          requestData.state = {
+            variables: {
+              imageUrl: body.MediaUrl0,
+            },
+          }
         }
       }
     }
@@ -94,7 +96,7 @@ export const Dialog = {
   },
 }
 
-const sendMessages = async (from, to, messages, noreply) => {
+const sendMessages = async (from, to, messages, noreply = 0) => {
   let noReply = noreply * 1000
   for (let i = 0; i < messages.length; i++) {
     const message = messages[i]
@@ -106,9 +108,12 @@ const sendMessages = async (from, to, messages, noreply) => {
       from,
       to,
     }
-    if (message.text) {
+    if (typeof message === 'string') {
+      messageOptions.body = message
+      delay = 2000 // Default delay for text messages
+    } else if (message.text) {
       messageOptions.body = message.text
-      delay = message.delay || 2000 // Add a delay before sending each message
+      delay = message.delay || 2000
     } else if (message.image) {
       messageOptions.mediaUrl = message.image
       try {
@@ -136,6 +141,8 @@ const sendMessages = async (from, to, messages, noreply) => {
     }, noReply)
   }
 }
+
+export { sendMessages }
 
 function createSession() {
   // Random Number Generator

@@ -55,6 +55,63 @@ OR
 
 Once the application is running, it will listen for incoming SMS messages on the `/sms` route. When a message is received, it will interact with the Voiceflow API and respond back via SMS using Twilio.
 
+## Endpoints
+
+### 1. `/sms` (POST)
+
+This endpoint handles incoming SMS messages from Twilio.
+
+### 2. `/send` (POST)
+
+This new endpoint allows you to send SMS messages directly or through the Voiceflow dialog manager.
+
+#### Payload Structure
+
+```json
+{
+  "from": "string",
+  "to": "string",
+  "direct": boolean,
+  "payload": {
+    "messages": string | string[],
+    "userId": "string",
+    "action": "string"
+  }
+}
+```
+
+- `from`: The sender's phone number (required)
+- `to`: The recipient's phone number (required)
+- `direct`: If true, sends the message directly via Twilio. If false, processes it through Voiceflow (required)
+- `payload`:
+  - `messages`: A single message string or an array of message strings (required)
+  - `userId`: User identifier (optional)
+  - `action`: Custom action for Voiceflow processing (optional, ignored if `direct` is true)
+
+#### Examples
+
+1. Sending a single message directly:
+
+```json
+{
+  "from": "+1234567890",
+  "to": "+1234567890",
+  "direct": true,
+  "payload": { "messages": "Hello, world!" }
+}
+```
+
+2. Sending multiple messages directly:
+
+```json
+{
+  "from": "+1234567890",
+  "to": "+1234567890",
+  "direct": true,
+  "payload": { "messages": ["Hello, this is the first message.", "And here's a second message!"] }
+}
+```
+
 ## Twilio Setup
 
 To use this application, you will need to set up a Twilio account and obtain your Account SID and Auth Token. These are used to authenticate requests made to the Twilio API.
